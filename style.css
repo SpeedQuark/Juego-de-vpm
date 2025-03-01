@@ -29,6 +29,9 @@ body {
 #juego p {
     font-size: 24px;
     margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Espacio entre palabras */
 }
 
 #botones button {
