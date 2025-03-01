@@ -1,1 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrenamiento de Velocidad</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Entrenamiento de Velocidad</h1>
+        <div id="configuracion">
+            <label for="separacion">Separación entre palabras (ms):</label>
+            <input type="number" id="separacion" value="1000">
+            
+            <label for="intentos">Número de intentos:</label>
+            <input type="number" id="intentos" value="10">
+            
+            <label for="tiempo">Tiempo de visualización (ms):</label>
+            <input type="number" id="tiempo" value="2000">
+            
+            <button id="comenzar">Comenzar</button>
+        </div>
 
+        <div id="juego" class="hidden">
+            <p id="combinacion"></p>
+            <div id="botones">
+                <button id="incorrecto">Incorrecto</button>
+                <button id="correcto">Correcto</button>
+            </div>
+        </div>
+
+        <div id="resultados" class="hidden">
+            <h2>RESULTADOS FINALES</h2>
+            <p>Intentos totales: <span id="total-intentos"></span></p>
+            <p>Aciertos: <span id="aciertos"></span></p>
+            <p>Errores: <span id="errores"></span></p>
+            <p>Racha máxima: <span id="racha-maxima"></span></p>
+            <p>Tiempo medio (solo aciertos): <span id="tiempo-medio"></span> ms</p>
+            <p>Tiempo medio total: <span id="tiempo-total"></span> ms</p>
+            <button id="reintentar">Reintentar</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
