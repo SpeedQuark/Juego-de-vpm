@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const botonIncorrecto = document.getElementById("incorrecto");
     const botonCorrecto = document.getElementById("correcto");
     const botonReintentar = document.getElementById("reintentar");
+    const botonCancelar = document.getElementById("cancelar");
+    const botonesRespuesta = document.getElementById("botones");
 
     const articulos = ["el", "la", "un", "una", "los", "las", "unos", "unas"];
     const sustantivos = ["casa", "perro", "gato", "árbol", "coche", "libro", "mesa", "silla"];
@@ -36,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         configuracion.classList.add("hidden");
         juego.classList.remove("hidden");
+        botonesRespuesta.classList.remove("hidden");
         mostrarSiguienteCombinacion();
     });
 
@@ -96,9 +99,18 @@ document.addEventListener("DOMContentLoaded", () => {
     botonIncorrecto.addEventListener("click", () => respuesta(false));
     botonCorrecto.addEventListener("click", () => respuesta(true));
 
+    botonCancelar.addEventListener("click", () => {
+        configuracion.classList.remove("hidden");
+        juego.classList.add("hidden");
+        resultados.classList.add("hidden");
+        botonesRespuesta.classList.add("hidden");
+        reiniciarJuego();
+    });
+
     function mostrarResultados() {
         juego.classList.add("hidden");
         resultados.classList.remove("hidden");
+        botonesRespuesta.classList.add("hidden");
 
         const tiempoMedioAciertos = tiemposAciertos.reduce((a, b) => a + b, 0) / tiemposAciertos.length || 0;
         const tiempoMedioTotal = (tiemposAciertos.reduce((a, b) => a + b, 0) + (errores * 2000)) / (aciertos + errores) || 0;
