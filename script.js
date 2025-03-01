@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
         configuracion.classList.add("hidden");
         juego.classList.remove("hidden");
         botonesRespuesta.classList.remove("hidden");
+        botonCancelar.classList.remove("hidden");
         mostrarSiguienteCombinacion();
     });
 
@@ -104,6 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
         juego.classList.add("hidden");
         resultados.classList.add("hidden");
         botonesRespuesta.classList.add("hidden");
+        botonCancelar.classList.add("hidden");
         reiniciarJuego();
     });
 
@@ -111,6 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
         juego.classList.add("hidden");
         resultados.classList.remove("hidden");
         botonesRespuesta.classList.add("hidden");
+        botonCancelar.classList.add("hidden");
 
         const tiempoMedioAciertos = tiemposAciertos.reduce((a, b) => a + b, 0) / tiemposAciertos.length || 0;
         const tiempoMedioTotal = (tiemposAciertos.reduce((a, b) => a + b, 0) + (errores * 2000)) / (aciertos + errores) || 0;
