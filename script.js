@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         setTimeout(() => {
             combinacion.textContent = "";
-            mostrarSiguienteCombinacion(parseInt(document.getElementById("tiempo").value);
+            mostrarSiguienteCombinacion(parseInt(document.getElementById("tiempo").value));
         }, parseInt(document.getElementById("separacion").value));
     }
 
