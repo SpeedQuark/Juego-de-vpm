@@ -1,0 +1,2 @@
+artículos:el,la,un,una,los,las,unos,unas
+sustantivos:casa,perro,gato,árbol,coche,libro,mesa,silla
