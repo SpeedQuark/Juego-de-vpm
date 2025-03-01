@@ -18,11 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let rachaActual = 0;
     let tiemposAciertos = [];
     let tiempoInicio = 0;
+    let tiempoVisualizacion = 0;
 
     botonComenzar.addEventListener("click", () => {
         const separacion = parseInt(document.getElementById("separacion").value);
         intentosTotales = parseInt(document.getElementById("intentos").value);
-        const tiempoVisualizacion = parseInt(document.getElementById("tiempo").value);
+        tiempoVisualizacion = parseInt(document.getElementById("tiempo").value);
 
         if (isNaN(separacion) || isNaN(intentosTotales) || isNaN(tiempoVisualizacion)) {
             alert("Por favor, ingresa valores numéricos válidos.");
@@ -34,10 +35,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         configuracion.classList.add("hidden");
         juego.classList.remove("hidden");
-        mostrarSiguienteCombinacion(tiempoVisualizacion);
+        mostrarSiguienteCombinacion();
     });
 
-    function mostrarSiguienteCombinacion(tiempoVisualizacion) {
+    function mostrarSiguienteCombinacion() {
         if (intentosTotales <= 0) {
             mostrarResultados();
             return;
@@ -52,15 +53,19 @@ document.addEventListener("DOMContentLoaded", () => {
             : `<span>${articulo}</span> <span>${sustantivos[Math.floor(Math.random() * sustantivos.length)]}</span>`;
         tiempoInicio = Date.now();
 
+        // Habilitar botones para responder
+        botonIncorrecto.disabled = false;
+        botonCorrecto.disabled = false;
+
+        // Deshabilitar botones después del tiempo de visualización
         setTimeout(() => {
             combinacion.innerHTML = "";
+            botonIncorrecto.disabled = true;
+            botonCorrecto.disabled = true;
         }, tiempoVisualizacion);
-
-        botonIncorrecto.onclick = () => respuesta(false, tiempoInicio);
-        botonCorrecto.onclick = () => respuesta(true, tiempoInicio);
     }
 
-    function respuesta(esCorrecta, tiempoInicio) {
+    function respuesta(esCorrecta) {
         const tiempoTardado = Date.now() - tiempoInicio;
         intentosTotales--;
 
@@ -80,9 +85,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         setTimeout(() => {
             combinacion.textContent = "";
-            mostrarSiguienteCombinacion(parseInt(document.getElementById("tiempo").value));
-        }, parseInt(document.getElementById("separacion").value));
+            mostrarSiguienteCombinacion();
+        }, 1000); // Esperar 1 segundo antes de mostrar la siguiente combinación
     }
+
+    botonIncorrecto.addEventListener("click", () => respuesta(false));
+    botonCorrecto.addEventListener("click", () => respuesta(true));
 
     function mostrarResultados() {
         juego.classList.add("hidden");
