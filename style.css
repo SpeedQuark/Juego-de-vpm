@@ -14,6 +14,8 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
+    width: 90%;
+    max-width: 600px;
 }
 
 .hidden {
@@ -22,37 +24,54 @@ body {
 
 #configuracion input {
     margin: 10px 0;
-    padding: 5px;
+    padding: 10px;
     width: 100%;
+    font-size: 16px;
 }
 
-#juego p {
-    font-size: 24px;
-    margin: 20px 0;
+#juego {
+    margin-top: 20px;
+}
+
+#combinacion {
+    font-size: 32px;
+    margin: 40px 0;
     display: flex;
     justify-content: center;
-    gap: 20px; /* Espacio entre palabras */
+    gap: 40px; /* Más espacio entre palabras */
+    flex-wrap: wrap;
+}
+
+#botones {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
 }
 
 #botones button {
-    padding: 10px 20px;
-    margin: 5px;
-    font-size: 16px;
+    padding: 15px 30px;
+    font-size: 18px;
     cursor: pointer;
+    border: none;
+    border-radius: 5px;
 }
 
 #incorrecto {
     background-color: red;
     color: white;
-    border: none;
 }
 
 #correcto {
     background-color: green;
     color: white;
-    border: none;
+}
+
+#resultados {
+    margin-top: 20px;
 }
 
 #resultados p {
     margin: 10px 0;
+    font-size: 18px;
 }
