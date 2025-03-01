@@ -7,10 +7,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Botón de cancelar -->
-        <button id="cancelar" class="btn-cancelar">X</button>
+    <!-- Botón de cancelar (solo visible durante el juego) -->
+    <button id="cancelar" class="btn-cancelar hidden">X</button>
 
+    <!-- Contenedor principal -->
+    <div class="container">
         <!-- Título -->
         <h1>Entrenamiento de Velocidad</h1>
 
@@ -46,7 +47,7 @@
         </div>
     </div>
 
-    <!-- Botones de respuesta (fijos en la parte inferior) -->
+    <!-- Botones de respuesta (fijos en la parte inferior, solo durante el juego) -->
     <div id="botones" class="hidden">
         <button id="incorrecto">Incorrecto</button>
         <button id="correcto">Correcto</button>
