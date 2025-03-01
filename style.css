@@ -1,0 +1,55 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+#configuracion input {
+    margin: 10px 0;
+    padding: 5px;
+    width: 100%;
+}
+
+#juego p {
+    font-size: 24px;
+    margin: 20px 0;
+}
+
+#botones button {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#incorrecto {
+    background-color: red;
+    color: white;
+    border: none;
+}
+
+#correcto {
+    background-color: green;
+    color: white;
+    border: none;
+}
+
+#resultados p {
+    margin: 10px 0;
+}
