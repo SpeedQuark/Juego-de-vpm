@@ -29,6 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        // Aplicar la separación entre palabras
+        combinacion.style.gap = `${separacion}px`;
+
         configuracion.classList.add("hidden");
         juego.classList.remove("hidden");
         mostrarSiguienteCombinacion(tiempoVisualizacion);
@@ -44,11 +47,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const sustantivo = sustantivos[Math.floor(Math.random() * sustantivos.length)];
         const esCorrecta = Math.random() < 0.5;
 
-        combinacion.textContent = esCorrecta ? `${articulo} ${sustantivo}` : `${articulo} ${sustantivos[Math.floor(Math.random() * sustantivos.length)]}`;
+        combinacion.innerHTML = esCorrecta
+            ? `<span>${articulo}</span> <span>${sustantivo}</span>`
+            : `<span>${articulo}</span> <span>${sustantivos[Math.floor(Math.random() * sustantivos.length)]}</span>`;
         tiempoInicio = Date.now();
 
         setTimeout(() => {
-            combinacion.textContent = "";
+            combinacion.innerHTML = "";
         }, tiempoVisualizacion);
 
         botonIncorrecto.onclick = () => respuesta(false, tiempoInicio);
