@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let tiemposAciertos = [];
     let tiempoInicio = 0;
     let tiempoVisualizacion = 0;
+    let esCorrecta = false;
 
     botonComenzar.addEventListener("click", () => {
         const separacion = parseInt(document.getElementById("separacion").value);
@@ -46,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const articulo = articulos[Math.floor(Math.random() * articulos.length)];
         const sustantivo = sustantivos[Math.floor(Math.random() * sustantivos.length)];
-        const esCorrecta = Math.random() < 0.5;
+        esCorrecta = Math.random() < 0.5;
 
         combinacion.innerHTML = esCorrecta
             ? `<span>${articulo}</span> <span>${sustantivo}</span>`
@@ -57,19 +58,21 @@ document.addEventListener("DOMContentLoaded", () => {
         botonIncorrecto.disabled = false;
         botonCorrecto.disabled = false;
 
-        // Deshabilitar botones después del tiempo de visualización
+        // Ocultar las palabras después del tiempo de visualización
         setTimeout(() => {
             combinacion.innerHTML = "";
-            botonIncorrecto.disabled = true;
-            botonCorrecto.disabled = true;
         }, tiempoVisualizacion);
     }
 
-    function respuesta(esCorrecta) {
+    function respuesta(usuarioRespondioCorrecto) {
         const tiempoTardado = Date.now() - tiempoInicio;
         intentosTotales--;
 
-        if (esCorrecta) {
+        // Deshabilitar botones después de responder
+        botonIncorrecto.disabled = true;
+        botonCorrecto.disabled = true;
+
+        if (usuarioRespondioCorrecto === esCorrecta) {
             aciertos++;
             rachaActual++;
             if (rachaActual > rachaMaxima) rachaMaxima = rachaActual;
@@ -83,10 +86,11 @@ document.addEventListener("DOMContentLoaded", () => {
             combinacion.style.color = "red";
         }
 
+        // Esperar 1 segundo antes de mostrar la siguiente combinación
         setTimeout(() => {
             combinacion.textContent = "";
             mostrarSiguienteCombinacion();
-        }, 1000); // Esperar 1 segundo antes de mostrar la siguiente combinación
+        }, 1000);
     }
 
     botonIncorrecto.addEventListener("click", () => respuesta(false));
