@@ -57,6 +57,9 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        // Reiniciar el juego
+        reiniciarJuego();
+
         // Mostrar solo la pantalla de juego
         mostrarPantalla("juego");
 
