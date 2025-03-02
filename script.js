@@ -99,11 +99,11 @@ document.addEventListener("DOMContentLoaded", () => {
             combinacion.style.color = "red";
         }
 
-        // Esperar 1 segundo antes de mostrar la siguiente combinación
+        // Mostrar el mensaje durante el tiempo de visualización
         setTimeout(() => {
             combinacion.textContent = "";
             mostrarSiguienteCombinacion();
-        }, 1000);
+        }, tiempoVisualizacion);
     }
 
     botonIncorrecto.addEventListener("click", () => respuesta(false));
