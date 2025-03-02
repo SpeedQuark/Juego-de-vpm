@@ -7,7 +7,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* Alinea el contenido hacia arriba */
     height: 100vh;
 }
 
@@ -41,6 +41,7 @@ body {
     text-align: center;
     width: 90%;
     max-width: 400px;
+    margin-top: 20px; /* Mueve el contenedor más arriba */
 }
 
 /* Título */
@@ -54,25 +55,25 @@ h1 {
 #configuracion {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px; /* Reduce el espacio entre elementos */
 }
 
 #configuracion label {
-    font-size: 16px;
+    font-size: 14px; /* Reduce el tamaño de la fuente */
     color: #555;
     text-align: left;
 }
 
 #configuracion input {
-    padding: 10px;
-    font-size: 16px;
+    padding: 8px; /* Reduce el padding */
+    font-size: 14px; /* Reduce el tamaño de la fuente */
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
 #configuracion button {
-    padding: 10px;
-    font-size: 16px;
+    padding: 8px; /* Reduce el padding */
+    font-size: 14px; /* Reduce el tamaño de la fuente */
     background-color: #28a745;
     color: white;
     border: none;
