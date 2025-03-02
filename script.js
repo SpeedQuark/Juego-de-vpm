@@ -23,12 +23,18 @@ document.addEventListener("DOMContentLoaded", () => {
     let tiempoVisualizacion = 0;
     let esCorrecta = false;
 
+    // Función para ocultar todas las pantallas
+    function ocultarTodasLasPantallas() {
+        configuracion.classList.add("hidden");
+        juego.classList.add("hidden");
+        resultados.classList.add("hidden");
+        botonesRespuesta.classList.add("hidden");
+        botonCancelar.classList.add("hidden");
+    }
+
     // Mostrar solo la pantalla de configuración al inicio
+    ocultarTodasLasPantallas();
     configuracion.classList.remove("hidden");
-    juego.classList.add("hidden");
-    resultados.classList.add("hidden");
-    botonesRespuesta.classList.add("hidden");
-    botonCancelar.classList.add("hidden");
 
     botonComenzar.addEventListener("click", () => {
         const separacion = parseInt(document.getElementById("separacion").value);
@@ -40,8 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Ocultar la pantalla de configuración y mostrar la de juego
-        configuracion.classList.add("hidden");
+        // Ocultar todas las pantallas y mostrar solo la de juego
+        ocultarTodasLasPantallas();
         juego.classList.remove("hidden");
         botonesRespuesta.classList.remove("hidden");
         botonCancelar.classList.remove("hidden");
@@ -110,19 +116,14 @@ document.addEventListener("DOMContentLoaded", () => {
     botonCorrecto.addEventListener("click", () => respuesta(true));
 
     botonCancelar.addEventListener("click", () => {
+        ocultarTodasLasPantallas();
         configuracion.classList.remove("hidden");
-        juego.classList.add("hidden");
-        resultados.classList.add("hidden");
-        botonesRespuesta.classList.add("hidden");
-        botonCancelar.classList.add("hidden");
         reiniciarJuego();
     });
 
     function mostrarResultados() {
-        juego.classList.add("hidden");
+        ocultarTodasLasPantallas();
         resultados.classList.remove("hidden");
-        botonesRespuesta.classList.add("hidden");
-        botonCancelar.classList.add("hidden");
 
         const tiempoMedioAciertos = tiemposAciertos.reduce((a, b) => a + b, 0) / tiemposAciertos.length || 0;
         const tiempoMedioTotal = (tiemposAciertos.reduce((a, b) => a + b, 0) + (errores * 2000)) / (aciertos + errores) || 0;
@@ -136,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     botonReintentar.addEventListener("click", () => {
-        resultados.classList.add("hidden");
+        ocultarTodasLasPantallas();
         configuracion.classList.remove("hidden");
         reiniciarJuego();
     });
