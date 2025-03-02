@@ -25,12 +25,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Función para mostrar solo una pantalla
     function mostrarPantalla(pantalla) {
+        // Oculta todas las pantallas
         configuracion.classList.add("hidden");
         juego.classList.add("hidden");
         resultados.classList.add("hidden");
         botonesRespuesta.classList.add("hidden");
         botonCancelar.classList.add("hidden");
 
+        // Muestra solo la pantalla solicitada
         if (pantalla === "configuracion") {
             configuracion.classList.remove("hidden");
         } else if (pantalla === "juego") {
