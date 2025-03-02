@@ -66,6 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Aplicar la separación entre palabras
         combinacion.style.gap = `${separacion}px`;
 
+        // Mostrar la primera combinación
         mostrarSiguienteCombinacion();
     });
 
