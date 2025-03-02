@@ -23,6 +23,13 @@ document.addEventListener("DOMContentLoaded", () => {
     let tiempoVisualizacion = 0;
     let esCorrecta = false;
 
+    // Mostrar solo la pantalla de configuración al inicio
+    configuracion.classList.remove("hidden");
+    juego.classList.add("hidden");
+    resultados.classList.add("hidden");
+    botonesRespuesta.classList.add("hidden");
+    botonCancelar.classList.add("hidden");
+
     botonComenzar.addEventListener("click", () => {
         const separacion = parseInt(document.getElementById("separacion").value);
         intentosTotales = parseInt(document.getElementById("intentos").value);
@@ -33,13 +40,15 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Aplicar la separación entre palabras
-        combinacion.style.gap = `${separacion}px`;
-
+        // Ocultar la pantalla de configuración y mostrar la de juego
         configuracion.classList.add("hidden");
         juego.classList.remove("hidden");
         botonesRespuesta.classList.remove("hidden");
         botonCancelar.classList.remove("hidden");
+
+        // Aplicar la separación entre palabras
+        combinacion.style.gap = `${separacion}px`;
+
         mostrarSiguienteCombinacion();
     });
 
