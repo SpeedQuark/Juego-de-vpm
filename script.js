@@ -23,18 +23,27 @@ document.addEventListener("DOMContentLoaded", () => {
     let tiempoVisualizacion = 0;
     let esCorrecta = false;
 
-    // Función para ocultar todas las pantallas
-    function ocultarTodasLasPantallas() {
+    // Función para mostrar solo una pantalla
+    function mostrarPantalla(pantalla) {
         configuracion.classList.add("hidden");
         juego.classList.add("hidden");
         resultados.classList.add("hidden");
         botonesRespuesta.classList.add("hidden");
         botonCancelar.classList.add("hidden");
+
+        if (pantalla === "configuracion") {
+            configuracion.classList.remove("hidden");
+        } else if (pantalla === "juego") {
+            juego.classList.remove("hidden");
+            botonesRespuesta.classList.remove("hidden");
+            botonCancelar.classList.remove("hidden");
+        } else if (pantalla === "resultados") {
+            resultados.classList.remove("hidden");
+        }
     }
 
     // Mostrar solo la pantalla de configuración al inicio
-    ocultarTodasLasPantallas();
-    configuracion.classList.remove("hidden");
+    mostrarPantalla("configuracion");
 
     botonComenzar.addEventListener("click", () => {
         const separacion = parseInt(document.getElementById("separacion").value);
@@ -46,11 +55,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Ocultar todas las pantallas y mostrar solo la de juego
-        ocultarTodasLasPantallas();
-        juego.classList.remove("hidden");
-        botonesRespuesta.classList.remove("hidden");
-        botonCancelar.classList.remove("hidden");
+        // Mostrar solo la pantalla de juego
+        mostrarPantalla("juego");
 
         // Aplicar la separación entre palabras
         combinacion.style.gap = `${separacion}px`;
@@ -116,14 +122,12 @@ document.addEventListener("DOMContentLoaded", () => {
     botonCorrecto.addEventListener("click", () => respuesta(true));
 
     botonCancelar.addEventListener("click", () => {
-        ocultarTodasLasPantallas();
-        configuracion.classList.remove("hidden");
+        mostrarPantalla("configuracion");
         reiniciarJuego();
     });
 
     function mostrarResultados() {
-        ocultarTodasLasPantallas();
-        resultados.classList.remove("hidden");
+        mostrarPantalla("resultados");
 
         const tiempoMedioAciertos = tiemposAciertos.reduce((a, b) => a + b, 0) / tiemposAciertos.length || 0;
         const tiempoMedioTotal = (tiemposAciertos.reduce((a, b) => a + b, 0) + (errores * 2000)) / (aciertos + errores) || 0;
@@ -137,8 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     botonReintentar.addEventListener("click", () => {
-        ocultarTodasLasPantallas();
-        configuracion.classList.remove("hidden");
+        mostrarPantalla("configuracion");
         reiniciarJuego();
     });
 
