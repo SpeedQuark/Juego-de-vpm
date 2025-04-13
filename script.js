@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Elementos del DOM
     const configuracion = document.getElementById("configuracion");
     const juego = document.getElementById("juego");
     const resultados = document.getElementById("resultados");
@@ -10,11 +11,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const botonCancelar = document.getElementById("cancelar");
     const botonesRespuesta = document.getElementById("botones");
 
+    // Datos del juego
     const articulos = ["el", "la", "un", "una", "los", "las", "unos", "unas"];
     const sustantivos = ["casa", "perro", "gato", "árbol", "coche", "libro", "mesa", "silla"];
 
+    // Variables de estado
     let intentosTotales = 0;
-    let intentosRealizados = 0; // ¡Nueva variable para contar intentos!
     let aciertos = 0;
     let errores = 0;
     let rachaMaxima = 0;
@@ -24,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let tiempoVisualizacion = 0;
     let esCorrecta = false;
 
+    // Funciones principales
     function mostrarPantalla(pantalla) {
         configuracion.classList.add("hidden");
         juego.classList.add("hidden");
@@ -31,120 +34,103 @@ document.addEventListener("DOMContentLoaded", () => {
         botonesRespuesta.classList.add("hidden");
         botonCancelar.classList.add("hidden");
 
-        if (pantalla === "configuracion") {
-            configuracion.classList.remove("hidden");
-        } else if (pantalla === "juego") {
+        if (pantalla === "configuracion") configuracion.classList.remove("hidden");
+        if (pantalla === "juego") {
             juego.classList.remove("hidden");
             botonesRespuesta.classList.remove("hidden");
             botonCancelar.classList.remove("hidden");
-        } else if (pantalla === "resultados") {
-            resultados.classList.remove("hidden");
         }
+        if (pantalla === "resultados") resultados.classList.remove("hidden");
     }
 
-    mostrarPantalla("configuracion");
-
-    botonComenzar.addEventListener("click", () => {
-        const separacion = parseInt(document.getElementById("separacion").value);
-        intentosTotales = parseInt(document.getElementById("intentos").value);
-        tiempoVisualizacion = parseInt(document.getElementById("tiempo").value);
-
-        if (isNaN(separacion) || isNaN(intentosTotales) || isNaN(tiempoVisualizacion)) {
-            alert("Por favor, ingresa valores numéricos válidos.");
-            return;
-        }
-
-        reiniciarJuego();
-        mostrarPantalla("juego");
-        combinacion.style.gap = `${separacion}px`;
-        mostrarSiguienteCombinacion();
-    });
-
-    // Función modificada para corregir el problema
     function mostrarSiguienteCombinacion() {
-        if (intentosRealizados >= intentosTotales) { // Cambio clave aquí
+        if (intentosTotales <= 0) {
             mostrarResultados();
             return;
         }
-
+        
         const articulo = articulos[Math.floor(Math.random() * articulos.length)];
         const sustantivo = sustantivos[Math.floor(Math.random() * sustantivos.length)];
-        esCorrecta = Math.random() < 0.5;
-
+        esCorrecta = Math.random() > 0.3; // 70% correctas
+        
         combinacion.innerHTML = esCorrecta
-            ? `<span>${articulo}</span> <span>${sustantivo}</span>`
-            : `<span>${articulo}</span> <span>${sustantivos[Math.floor(Math.random() * sustantivos.length)]}</span>`;
+            ? `${articulo} ${sustantivo}`
+            : `${articulo} ${sustantivos.filter(s => s !== sustantivo)[Math.floor(Math.random() * (sustantivos.length-1))]}`;
+        
         tiempoInicio = Date.now();
-
-        botonIncorrecto.disabled = false;
-        botonCorrecto.disabled = false;
-
+        intentosTotales--;
+        
         setTimeout(() => {
-            combinacion.innerHTML = "";
+            if (intentosTotales >= 0) combinacion.textContent = "";
         }, tiempoVisualizacion);
-
-        intentosRealizados++; // Incrementamos aquí
     }
 
-    function respuesta(usuarioRespondioCorrecto) {
-        const tiempoTardado = Date.now() - tiempoInicio;
-
-        botonIncorrecto.disabled = true;
-        botonCorrecto.disabled = true;
-
-        if (usuarioRespondioCorrecto === esCorrecta) {
+    function procesarRespuesta(respuestaUsuario) {
+        const tiempoRespuesta = Date.now() - tiempoInicio;
+        
+        if (respuestaUsuario === esCorrecta) {
             aciertos++;
             rachaActual++;
             if (rachaActual > rachaMaxima) rachaMaxima = rachaActual;
-            tiemposAciertos.push(tiempoTardado);
-            combinacion.textContent = `Correcto (${tiempoTardado} ms)`;
-            combinacion.style.color = "green";
+            tiemposAciertos.push(tiempoRespuesta);
+            combinacion.textContent = `✓ (${tiempoRespuesta}ms)`;
+            combinacion.style.color = "#4CAF50";
         } else {
             errores++;
             rachaActual = 0;
-            combinacion.textContent = `Incorrecto (${tiempoTardado} ms)`;
-            combinacion.style.color = "red";
+            combinacion.textContent = `✗ (${tiempoRespuesta}ms)`;
+            combinacion.style.color = "#ff4444";
         }
-
+        
         setTimeout(() => {
             combinacion.textContent = "";
             mostrarSiguienteCombinacion();
-        }, tiempoVisualizacion);
+        }, 1000);
     }
 
-    botonIncorrecto.addEventListener("click", () => respuesta(false));
-    botonCorrecto.addEventListener("click", () => respuesta(true));
-
-    botonCancelar.addEventListener("click", () => {
-        mostrarPantalla("configuracion");
-        reiniciarJuego();
-    });
-
     function mostrarResultados() {
-        mostrarPantalla("resultados");
-
-        const tiempoMedioAciertos = tiemposAciertos.reduce((a, b) => a + b, 0) / tiemposAciertos.length || 0;
-        const tiempoMedioTotal = (tiemposAciertos.reduce((a, b) => a + b, 0) + (errores * 2000)) / (aciertos + errores) || 0;
-
         document.getElementById("total-intentos").textContent = aciertos + errores;
         document.getElementById("aciertos").textContent = aciertos;
         document.getElementById("errores").textContent = errores;
         document.getElementById("racha-maxima").textContent = rachaMaxima;
-        document.getElementById("tiempo-medio").textContent = Math.round(tiempoMedioAciertos);
-        document.getElementById("tiempo-total").textContent = Math.round(tiempoMedioTotal);
+        document.getElementById("tiempo-medio").textContent = 
+            tiemposAciertos.length > 0 ? Math.round(tiemposAciertos.reduce((a, b) => a + b, 0) / tiemposAciertos.length) : 0;
+        
+        mostrarPantalla("resultados");
     }
 
-    botonReintentar.addEventListener("click", () => {
-        mostrarPantalla("configuracion");
-        reiniciarJuego();
-    });
-
     function reiniciarJuego() {
-        intentosRealizados = 0; // ¡Reiniciar el contador!
         aciertos = 0;
         errores = 0;
         rachaMaxima = 0;
         rachaActual = 0;
         tiemposAciertos = [];
     }
+
+    // Event listeners
+    botonComenzar.addEventListener("click", () => {
+        const separacion = parseInt(document.getElementById("separacion").value);
+        intentosTotales = parseInt(document.getElementById("intentos").value);
+        tiempoVisualizacion = parseInt(document.getElementById("tiempo").value);
+        
+        if ([separacion, intentosTotales, tiempoVisualizacion].some(isNaN)) {
+            alert("Por favor ingresa valores válidos");
+            return;
+        }
+        
+        combinacion.style.gap = `${separacion}px`;
+        reiniciarJuego();
+        mostrarPantalla("juego");
+        mostrarSiguienteCombinacion();
+    });
+
+    botonCorrecto.addEventListener("click", () => procesarRespuesta(true));
+    botonIncorrecto.addEventListener("click", () => procesarRespuesta(false));
+    botonReintentar.addEventListener("click", () => mostrarPantalla("configuracion"));
+    botonCancelar.addEventListener("click", () => {
+        if (confirm("¿Cancelar el entrenamiento?")) mostrarPantalla("configuracion");
+    });
+
+    // Iniciar
+    mostrarPantalla("configuracion");
 });
