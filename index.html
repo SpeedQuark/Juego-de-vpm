@@ -7,47 +7,42 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Botón de cancelar (solo visible durante el juego) -->
     <button id="cancelar" class="btn-cancelar hidden">X</button>
-
-    <!-- Contenedor principal -->
     <div class="container">
-        <!-- Título -->
         <h1>Entrenamiento de Velocidad</h1>
-
-        <!-- Configuración inicial -->
+        
         <div id="configuracion">
-            <label for="separacion">Separación entre palabras (px):</label>
-            <input type="number" id="separacion" value="20">
-            
-            <label for="intentos">Número de intentos:</label>
-            <input type="number" id="intentos" value="10">
-            
-            <label for="tiempo">Tiempo de visualización (ms):</label>
-            <input type="number" id="tiempo" value="2000">
-            
-            <button id="comenzar">Comenzar</button>
+            <h2>Configuración</h2>
+            <div class="parametro">
+                <label>Separación (px):</label>
+                <input type="number" id="separacion" value="20" min="10" max="100">
+            </div>
+            <div class="parametro">
+                <label>Frases a mostrar:</label>
+                <input type="number" id="intentos" value="10" min="1" max="50">
+            </div>
+            <div class="parametro">
+                <label>Tiempo (ms):</label>
+                <input type="number" id="tiempo" value="2000" min="500" max="5000">
+            </div>
+            <button id="comenzar">Comenzar Entrenamiento</button>
         </div>
 
-        <!-- Juego -->
         <div id="juego" class="hidden">
             <p id="combinacion"></p>
         </div>
 
-        <!-- Resultados -->
         <div id="resultados" class="hidden">
             <h2>RESULTADOS FINALES</h2>
             <p>Intentos totales: <span id="total-intentos"></span></p>
             <p>Aciertos: <span id="aciertos"></span></p>
             <p>Errores: <span id="errores"></span></p>
             <p>Racha máxima: <span id="racha-maxima"></span></p>
-            <p>Tiempo medio (solo aciertos): <span id="tiempo-medio"></span> ms</p>
-            <p>Tiempo medio total: <span id="tiempo-total"></span> ms</p>
+            <p>Tiempo medio (aciertos): <span id="tiempo-medio"></span> ms</p>
             <button id="reintentar">Reintentar</button>
         </div>
     </div>
 
-    <!-- Botones de respuesta (fijos en la parte inferior, solo durante el juego) -->
     <div id="botones" class="hidden">
         <button id="incorrecto">Incorrecto</button>
         <button id="correcto">Correcto</button>
