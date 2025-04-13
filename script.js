@@ -1,28 +1,24 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function() {
     // Elementos del DOM
-    const elementos = {
-        config: document.getElementById("configuracion"),
-        juego: document.getElementById("juego"),
-        resultados: document.getElementById("resultados"),
-        combo: document.getElementById("combinacion"),
-        botones: document.getElementById("botones"),
-        btnComenzar: document.getElementById("comenzar"),
-        btnIncorrecto: document.getElementById("incorrecto"),
-        btnCorrecto: document.getElementById("correcto"),
-        btnReintentar: document.getElementById("reintentar"),
-        btnCancelar: document.getElementById("cancelar")
-    };
+    const configuracion = document.getElementById("configuracion");
+    const juego = document.getElementById("juego");
+    const resultados = document.getElementById("resultados");
+    const combinacion = document.getElementById("combinacion");
+    const botonComenzar = document.getElementById("comenzar");
+    const botonIncorrecto = document.getElementById("incorrecto");
+    const botonCorrecto = document.getElementById("correcto");
+    const botonReintentar = document.getElementById("reintentar");
+    const botonCancelar = document.getElementById("cancelar");
+    const botonesRespuesta = document.getElementById("botones");
 
-    // Diccionarios de palabras
-    const vocabulario = {
-        articulos: ["el", "la", "un", "una", "los", "las", "unos", "unas", "este", "esta", "estos", "estas"],
-        sustantivos: ["casa", "perro", "gato", "árbol", "coche", "libro", "mesa", "silla", "ciudad", "flor"],
-        adjetivos: ["grande", "pequeño", "rojo", "azul", "alto", "bajo", "bonito", "feo"],
-        verbos: ["corre", "salta", "lee", "juega", "canta", "dibuja"]
-    };
+    // Vocabulario
+    const articulos = ["el", "la", "un", "una", "los", "las", "unos", "unas", "este", "esta", "estos", "estas"];
+    const sustantivos = ["casa", "perro", "gato", "árbol", "coche", "libro", "mesa", "silla", "ciudad", "flor"];
+    const adjetivos = ["grande", "pequeño", "rojo", "azul", "alto", "bajo", "bonito", "feo"];
+    const verbos = ["corre", "salta", "lee", "juega", "canta", "dibuja"];
 
     // Gramática
-    const gramatica = {
+    const generoNumero = {
         "el": { genero: "masculino", numero: "singular" },
         "la": { genero: "femenino", numero: "singular" },
         "los": { genero: "masculino", numero: "plural" },
@@ -37,54 +33,100 @@ document.addEventListener("DOMContentLoaded", () => {
         "estas": { genero: "femenino", numero: "plural" }
     };
 
+    const diccionario = {
+        "casa": { genero: "femenino", numero: "singular" },
+        "perro": { genero: "masculino", numero: "singular" },
+        "gato": { genero: "masculino", numero: "singular" },
+        "árbol": { genero: "masculino", numero: "singular" },
+        "coche": { genero: "masculino", numero: "singular" },
+        "libro": { genero: "masculino", numero: "singular" },
+        "mesa": { genero: "femenino", numero: "singular" },
+        "silla": { genero: "femenino", numero: "singular" },
+        "ciudad": { genero: "femenino", numero: "singular" },
+        "flor": { genero: "femenino", numero: "singular" },
+        "grande": { genero: "ambos", numero: "ambos" },
+        "pequeño": { genero: "masculino", numero: "singular" },
+        "pequeña": { genero: "femenino", numero: "singular" },
+        "rojo": { genero: "masculino", numero: "singular" },
+        "roja": { genero: "femenino", numero: "singular" },
+        "azul": { genero: "ambos", numero: "ambos" },
+        "alto": { genero: "masculino", numero: "singular" },
+        "alta": { genero: "femenino", numero: "singular" },
+        "bajo": { genero: "masculino", numero: "singular" },
+        "baja": { genero: "femenino", numero: "singular" },
+        "bonito": { genero: "masculino", numero: "singular" },
+        "bonita": { genero: "femenino", numero: "singular" },
+        "feo": { genero: "masculino", numero: "singular" },
+        "fea": { genero: "femenino", numero: "singular" }
+    };
+
     // Estado del juego
-    const estado = {
-        intentos: 0,
+    let estado = {
+        intentosTotales: 0,
+        intentosRestantes: 0,
         aciertos: 0,
         errores: 0,
-        racha: 0,
-        rachaMax: 0,
-        tiempos: [],
-        inicio: 0,
-        tiempoMostrar: 0,
+        rachaActual: 0,
+        rachaMaxima: 0,
+        tiemposRespuesta: [],
+        tiempoInicio: 0,
+        tiempoVisualizacion: 2000,
         esCorrecta: false,
         dificultad: 1
     };
 
     // Funciones auxiliares
-    const aleatorio = (arr) => arr[Math.floor(Math.random() * arr.length)];
-    const mostrarPantalla = (pantalla) => {
-        Object.values(elementos).forEach(el => {
-            if (el !== elementos.btnCancelar) el.classList.add("hidden");
-        });
-        if (pantalla === "config") elementos.config.classList.remove("hidden");
-        if (pantalla === "juego") {
-            elementos.juego.classList.remove("hidden");
-            elementos.botones.classList.remove("hidden");
-            elementos.btnCancelar.classList.remove("hidden");
-        }
-        if (pantalla === "resultados") elementos.resultados.classList.remove("hidden");
-    };
+    function randomItem(array) {
+        return array[Math.floor(Math.random() * array.length)];
+    }
 
-    // Generador de frases
-    const generarFrase = () => {
-        const sustantivo = aleatorio(vocabulario.sustantivos);
-        const { genero, numero } = gramatica[sustantivo] || { genero: "masculino", numero: "singular" };
+    function mostrarPantalla(pantalla) {
+        configuracion.classList.add("hidden");
+        juego.classList.add("hidden");
+        resultados.classList.add("hidden");
+        botonesRespuesta.classList.add("hidden");
+        botonCancelar.classList.add("hidden");
+
+        if (pantalla === "configuracion") {
+            configuracion.classList.remove("hidden");
+        } else if (pantalla === "juego") {
+            juego.classList.remove("hidden");
+            botonesRespuesta.classList.remove("hidden");
+            botonCancelar.classList.remove("hidden");
+        } else if (pantalla === "resultados") {
+            resultados.classList.remove("hidden");
+        }
+    }
+
+    function verificarConcordancia(articulo, palabra) {
+        if (!generoNumero[articulo] || !diccionario[palabra]) return true;
+        if (diccionario[palabra].genero === "ambos") return true;
         
-        // Decidir si será correcta (50/50)
-        estado.esCorrecta = Math.random() > 0.5;
+        return generoNumero[articulo].genero === diccionario[palabra].genero && 
+               generoNumero[articulo].numero === diccionario[palabra].numero;
+    }
+
+    function generarFrase() {
+        const sustantivo = randomItem(sustantivos);
+        const { genero, numero } = diccionario[sustantivo];
         
-        // Artículo (correcto o incorrecto)
+        // 50% de probabilidad de ser correcta o incorrecta
+        const esCorrecta = Math.random() > 0.5;
+        estado.esCorrecta = esCorrecta;
+        
+        // Seleccionar artículo
         let articulo;
-        if (estado.esCorrecta) {
-            articulo = aleatorio(vocabulario.articulos.filter(a => 
-                gramatica[a].genero === genero && 
-                gramatica[a].numero === numero
+        if (esCorrecta) {
+            // Seleccionar artículo correcto
+            articulo = randomItem(articulos.filter(a => 
+                generoNumero[a].genero === genero && 
+                generoNumero[a].numero === numero
             ));
         } else {
-            articulo = aleatorio(vocabulario.articulos.filter(a => 
-                gramatica[a].genero !== genero || 
-                gramatica[a].numero !== numero
+            // Seleccionar artículo incorrecto
+            articulo = randomItem(articulos.filter(a => 
+                generoNumero[a].genero !== genero || 
+                generoNumero[a].numero !== numero
             ));
         }
         
@@ -92,109 +134,133 @@ document.addEventListener("DOMContentLoaded", () => {
         let frase = `${articulo} ${sustantivo}`;
         
         if (estado.dificultad === 2) {
-            if (Math.random() > 0.5) { // Adjetivo
-                let adjetivo = aleatorio(vocabulario.adjetivos);
-                
-                if (!estado.esCorrecta && Math.random() > 0.5) {
-                    // Hacer adjetivo incorrecto (50% de las frases incorrectas)
-                    adjetivo = aleatorio(vocabulario.adjetivos.filter(a => 
-                        gramatica[a]?.genero !== genero || 
-                        gramatica[a]?.numero !== numero
+            // Añadir adjetivo o verbo
+            if (Math.random() > 0.5) {
+                // Añadir adjetivo
+                let adjetivo;
+                if (esCorrecta) {
+                    adjetivo = randomItem(adjetivos.filter(a => 
+                        !diccionario[a] || 
+                        diccionario[a].genero === "ambos" || 
+                        diccionario[a].genero === genero
+                    ));
+                } else {
+                    // Adjetivo incorrecto
+                    adjetivo = randomItem(adjetivos.filter(a => 
+                        diccionario[a] && 
+                        diccionario[a].genero !== "ambos" && 
+                        diccionario[a].genero !== genero
                     ));
                 }
-                
                 frase += ` ${adjetivo}`;
-            } else { // Verbo
-                frase += ` ${aleatorio(vocabulario.verbos)}`;
+            } else {
+                // Añadir verbo
+                frase += ` ${randomItem(verbos)}`;
             }
         }
         
         return frase;
-    };
+    }
 
-    // Control del juego
-    const siguienteFrase = () => {
-        if (estado.intentos <= 0) {
-            finalizarJuego();
+    function mostrarSiguienteCombinacion() {
+        if (estado.intentosRestantes <= 0) {
+            mostrarResultados();
             return;
         }
         
-        elementos.combo.textContent = generarFrase();
-        estado.inicio = Date.now();
-        estado.intentos--;
+        combinacion.textContent = generarFrase();
+        estado.tiempoInicio = Date.now();
+        estado.intentosRestantes--;
         
         setTimeout(() => {
-            elementos.combo.textContent = "";
-        }, estado.tiempoMostrar);
-    };
+            combinacion.textContent = "";
+        }, estado.tiempoVisualizacion);
+    }
 
-    const procesarRespuesta = (respuesta) => {
-        const tiempo = Date.now() - estado.inicio;
+    function procesarRespuesta(respuestaUsuario) {
+        const tiempoRespuesta = Date.now() - estado.tiempoInicio;
         
-        if (respuesta === estado.esCorrecta) {
+        if (respuestaUsuario === estado.esCorrecta) {
             estado.aciertos++;
-            estado.racha++;
-            if (estado.racha > estado.rachaMax) estado.rachaMax = estado.racha;
-            estado.tiempos.push(tiempo);
-            elementos.combo.textContent = `✓ ${tiempo}ms`;
-            elementos.combo.style.color = "#4CAF50";
+            estado.rachaActual++;
+            if (estado.rachaActual > estado.rachaMaxima) {
+                estado.rachaMaxima = estado.rachaActual;
+            }
+            estado.tiemposRespuesta.push(tiempoRespuesta);
+            combinacion.textContent = `✓ ${tiempoRespuesta}ms`;
+            combinacion.style.color = "#4CAF50";
         } else {
             estado.errores++;
-            estado.racha = 0;
-            elementos.combo.textContent = `✗ ${tiempo}ms`;
-            elementos.combo.style.color = "#ff4444";
+            estado.rachaActual = 0;
+            combinacion.textContent = `✗ ${tiempoRespuesta}ms`;
+            combinacion.style.color = "#ff4444";
         }
         
-        setTimeout(siguienteFrase, 1000);
-    };
+        setTimeout(() => {
+            combinacion.textContent = "";
+            mostrarSiguienteCombinacion();
+        }, 1000);
+    }
 
-    const finalizarJuego = () => {
-        const tiempoPromedio = estado.tiempos.length > 0 
-            ? Math.round(estado.tiempos.reduce((a, b) => a + b, 0) / estado.tiempos.length)
+    function mostrarResultados() {
+        mostrarPantalla("resultados");
+        
+        const tiempoMedio = estado.tiemposRespuesta.length > 0 
+            ? Math.round(estado.tiemposRespuesta.reduce((a, b) => a + b, 0) / estado.tiemposRespuesta.length)
             : 0;
         
-        document.getElementById("total-intentos").textContent = estado.aciertos + estado.errores;
+        document.getElementById("total-intentos").textContent = estado.intentosTotales;
         document.getElementById("aciertos").textContent = estado.aciertos;
         document.getElementById("errores").textContent = estado.errores;
-        document.getElementById("racha-maxima").textContent = estado.rachaMax;
-        document.getElementById("tiempo-medio").textContent = tiempoPromedio;
-        
-        mostrarPantalla("resultados");
-    };
+        document.getElementById("racha-maxima").textContent = estado.rachaMaxima;
+        document.getElementById("tiempo-medio").textContent = tiempoMedio;
+    }
 
-    const reiniciar = () => {
+    function reiniciarJuego() {
         estado.aciertos = 0;
         estado.errores = 0;
-        estado.racha = 0;
-        estado.rachaMax = 0;
-        estado.tiempos = [];
-    };
+        estado.rachaActual = 0;
+        estado.rachaMaxima = 0;
+        estado.tiemposRespuesta = [];
+    }
 
-    // Eventos
-    elementos.btnComenzar.addEventListener("click", () => {
+    // Event Listeners
+    botonComenzar.addEventListener("click", function() {
         estado.dificultad = parseInt(document.getElementById("dificultad").value);
-        estado.tiempoMostrar = parseInt(document.getElementById("tiempo").value);
-        estado.intentos = parseInt(document.getElementById("intentos").value);
+        estado.intentosTotales = parseInt(document.getElementById("intentos").value);
+        estado.tiempoVisualizacion = parseInt(document.getElementById("tiempo").value);
         const separacion = parseInt(document.getElementById("separacion").value);
         
-        if ([estado.tiempoMostrar, estado.intentos, separacion].some(isNaN)) {
-            alert("Ingresa valores válidos");
+        if (isNaN(estado.intentosTotales) || isNaN(estado.tiempoVisualizacion) || isNaN(separacion)) {
+            alert("Por favor, ingresa valores válidos");
             return;
         }
         
-        elementos.combo.style.gap = `${separacion}px`;
-        reiniciar();
+        estado.intentosRestantes = estado.intentosTotales;
+        combinacion.style.gap = `${separacion}px`;
+        reiniciarJuego();
         mostrarPantalla("juego");
-        siguienteFrase();
+        mostrarSiguienteCombinacion();
     });
 
-    elementos.btnCorrecto.addEventListener("click", () => procesarRespuesta(true));
-    elementos.btnIncorrecto.addEventListener("click", () => procesarRespuesta(false));
-    elementos.btnReintentar.addEventListener("click", () => mostrarPantalla("config"));
-    elementos.btnCancelar.addEventListener("click", () => {
-        if (confirm("¿Cancelar el entrenamiento?")) mostrarPantalla("config");
+    botonCorrecto.addEventListener("click", function() {
+        procesarRespuesta(true);
     });
 
-    // Iniciar
-    mostrarPantalla("config");
+    botonIncorrecto.addEventListener("click", function() {
+        procesarRespuesta(false);
+    });
+
+    botonReintentar.addEventListener("click", function() {
+        mostrarPantalla("configuracion");
+    });
+
+    botonCancelar.addEventListener("click", function() {
+        if (confirm("¿Cancelar el entrenamiento?")) {
+            mostrarPantalla("configuracion");
+        }
+    });
+
+    // Inicialización
+    mostrarPantalla("configuracion");
 });
