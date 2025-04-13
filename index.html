@@ -3,29 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entrenamiento de Velocidad</title>
+    <title>Entrenador Gramatical</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <button id="cancelar" class="btn-cancelar hidden">X</button>
     <div class="container">
-        <h1>Entrenamiento de Velocidad</h1>
+        <h1>Entrenador Gramatical</h1>
         
         <div id="configuracion">
             <h2>Configuración</h2>
+            <div class="parametro">
+                <label>Dificultad:</label>
+                <select id="dificultad">
+                    <option value="1">Nivel 1 (2 palabras)</option>
+                    <option value="2">Nivel 2 (3 palabras)</option>
+                </select>
+            </div>
             <div class="parametro">
                 <label>Separación (px):</label>
                 <input type="number" id="separacion" value="20" min="10" max="100">
             </div>
             <div class="parametro">
-                <label>Frases a mostrar:</label>
+                <label>Intentos:</label>
                 <input type="number" id="intentos" value="10" min="1" max="50">
             </div>
             <div class="parametro">
                 <label>Tiempo (ms):</label>
                 <input type="number" id="tiempo" value="2000" min="500" max="5000">
             </div>
-            <button id="comenzar">Comenzar Entrenamiento</button>
+            <button id="comenzar">Comenzar</button>
         </div>
 
         <div id="juego" class="hidden">
@@ -33,12 +40,12 @@
         </div>
 
         <div id="resultados" class="hidden">
-            <h2>RESULTADOS FINALES</h2>
-            <p>Intentos totales: <span id="total-intentos"></span></p>
+            <h2>RESULTADOS</h2>
+            <p>Intentos: <span id="total-intentos"></span></p>
             <p>Aciertos: <span id="aciertos"></span></p>
             <p>Errores: <span id="errores"></span></p>
             <p>Racha máxima: <span id="racha-maxima"></span></p>
-            <p>Tiempo medio (aciertos): <span id="tiempo-medio"></span> ms</p>
+            <p>Tiempo medio: <span id="tiempo-medio"></span> ms</p>
             <button id="reintentar">Reintentar</button>
         </div>
     </div>
