@@ -22,7 +22,15 @@ body {
     display: none !important;
 }
 
-/* ESTILOS DE CONFIGURACIÓN (GARANTIZA VISIBILIDAD DEL BOTÓN) */
+/* TÍTULO DEL JUEGO */
+.titulo-juego {
+    font-size: 1.5rem;
+    text-align: center;
+    color: #333;
+    margin: 0 0 20px 0;
+}
+
+/* CONFIGURACIÓN */
 #configuracion {
     display: flex;
     flex-direction: column;
@@ -50,7 +58,7 @@ body {
     font-size: 14px;
 }
 
-/* BOTÓN COMENZAR - ESTILOS PRIORITARIOS */
+/* BOTÓN COMENZAR */
 .btn-comenzar {
     grid-column: span 2;
     padding: 12px;
@@ -70,19 +78,32 @@ body {
     background-color: #45a049;
 }
 
-/* RESTO DE ESTILOS */
+/* ÁREA DE JUEGO */
 #combinacion {
+    color: #000; /* Texto en negro */
     font-size: 28px;
     text-align: center;
     margin: 30px 0;
     min-height: 50px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
+/* BOTONES DE RESPUESTA */
 #botones {
     display: flex;
     justify-content: center;
     gap: 15px;
     margin-top: 20px;
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    background-color: white;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 }
 
 #botones button {
@@ -91,6 +112,11 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: transform 0.2s;
+}
+
+#botones button:hover {
+    transform: translateY(-2px);
 }
 
 #incorrecto {
@@ -103,12 +129,14 @@ body {
     color: white;
 }
 
+/* RESULTADOS */
 #resultados {
     text-align: center;
 }
 
 #resultados p {
     margin: 10px 0;
+    font-size: 16px;
 }
 
 #reintentar {
@@ -119,4 +147,13 @@ body {
     border-radius: 5px;
     cursor: pointer;
     margin-top: 20px;
+}
+
+/* CLASES PARA FEEDBACK */
+.correcto {
+    color: #4CAF50 !important; /* Verde para aciertos */
+}
+
+.incorrecto {
+    color: #ff4444 !important; /* Rojo para errores */
 }
