@@ -13,29 +13,47 @@
         <div id="configuracion">
             <h2>Configuración</h2>
             <div class="parametro">
-                <label for="dificultad">Dificultad:</label>
+                <label>Dificultad:</label>
                 <select id="dificultad">
                     <option value="1">Nivel 1 (2 palabras)</option>
                     <option value="2">Nivel 2 (3 palabras)</option>
                 </select>
             </div>
             <div class="parametro">
-                <label for="separacion">Separación (px):</label>
+                <label>Separación (px):</label>
                 <input type="number" id="separacion" value="20" min="10" max="100">
             </div>
             <div class="parametro">
-                <label for="intentos">Intentos:</label>
+                <label>Intentos:</label>
                 <input type="number" id="intentos" value="10" min="1" max="50">
             </div>
             <div class="parametro">
-                <label for="tiempo">Tiempo (ms):</label>
+                <label>Tiempo (ms):</label>
                 <input type="number" id="tiempo" value="2000" min="500" max="5000">
             </div>
-            <button id="comenzar" class="btn-primario">Comenzar</button>
+            <button id="comenzar" class="btn-comenzar">Comenzar Entrenamiento</button>
         </div>
 
-        <!-- Resto del contenido permanece igual -->
+        <div id="juego" class="hidden">
+            <p id="combinacion"></p>
+        </div>
+
+        <div id="resultados" class="hidden">
+            <h2>RESULTADOS</h2>
+            <p>Intentos: <span id="total-intentos"></span></p>
+            <p>Aciertos: <span id="aciertos"></span></p>
+            <p>Errores: <span id="errores"></span></p>
+            <p>Racha máxima: <span id="racha-maxima"></span></p>
+            <p>Tiempo medio: <span id="tiempo-medio"></span> ms</p>
+            <button id="reintentar">Reintentar</button>
+        </div>
     </div>
+
+    <div id="botones" class="hidden">
+        <button id="incorrecto">Incorrecto</button>
+        <button id="correcto">Correcto</button>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
