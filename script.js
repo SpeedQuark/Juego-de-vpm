@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const sustantivos = ["casa", "perro", "gato", "árbol", "coche", "libro", "mesa", "silla"];
 
     let intentosTotales = 0;
+    let intentosRealizados = 0; // ¡Nueva variable para contar intentos!
     let aciertos = 0;
     let errores = 0;
     let rachaMaxima = 0;
@@ -23,16 +24,13 @@ document.addEventListener("DOMContentLoaded", () => {
     let tiempoVisualizacion = 0;
     let esCorrecta = false;
 
-    // Función para mostrar solo una pantalla
     function mostrarPantalla(pantalla) {
-        // Oculta todas las pantallas
         configuracion.classList.add("hidden");
         juego.classList.add("hidden");
         resultados.classList.add("hidden");
         botonesRespuesta.classList.add("hidden");
         botonCancelar.classList.add("hidden");
 
-        // Muestra solo la pantalla solicitada
         if (pantalla === "configuracion") {
             configuracion.classList.remove("hidden");
         } else if (pantalla === "juego") {
@@ -44,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Mostrar solo la pantalla de configuración al inicio
     mostrarPantalla("configuracion");
 
     botonComenzar.addEventListener("click", () => {
@@ -57,21 +54,15 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Reiniciar el juego
         reiniciarJuego();
-
-        // Mostrar solo la pantalla de juego
         mostrarPantalla("juego");
-
-        // Aplicar la separación entre palabras
         combinacion.style.gap = `${separacion}px`;
-
-        // Mostrar la primera combinación
         mostrarSiguienteCombinacion();
     });
 
+    // Función modificada para corregir el problema
     function mostrarSiguienteCombinacion() {
-        if (intentosTotales <= 0) {
+        if (intentosRealizados >= intentosTotales) { // Cambio clave aquí
             mostrarResultados();
             return;
         }
@@ -85,21 +76,19 @@ document.addEventListener("DOMContentLoaded", () => {
             : `<span>${articulo}</span> <span>${sustantivos[Math.floor(Math.random() * sustantivos.length)]}</span>`;
         tiempoInicio = Date.now();
 
-        // Habilitar botones para responder
         botonIncorrecto.disabled = false;
         botonCorrecto.disabled = false;
 
-        // Ocultar las palabras después del tiempo de visualización
         setTimeout(() => {
             combinacion.innerHTML = "";
         }, tiempoVisualizacion);
+
+        intentosRealizados++; // Incrementamos aquí
     }
 
     function respuesta(usuarioRespondioCorrecto) {
         const tiempoTardado = Date.now() - tiempoInicio;
-        intentosTotales--;
 
-        // Deshabilitar botones después de responder
         botonIncorrecto.disabled = true;
         botonCorrecto.disabled = true;
 
@@ -117,7 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
             combinacion.style.color = "red";
         }
 
-        // Mostrar el mensaje durante el tiempo de visualización
         setTimeout(() => {
             combinacion.textContent = "";
             mostrarSiguienteCombinacion();
@@ -152,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function reiniciarJuego() {
-        intentosTotales = 0;
+        intentosRealizados = 0; // ¡Reiniciar el contador!
         aciertos = 0;
         errores = 0;
         rachaMaxima = 0;
