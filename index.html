@@ -3,29 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juego VPM</title>
+    <title>Juego VPM - Gramática Veloz</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1 class="titulo-juego">Juego VPM</h1>
-        
+        <h1 class="titulo-juego">Gramática Veloz</h1>
+
         <div id="configuracion">
             <h2>Configuración</h2>
             <div class="parametro">
-                <label>Dificultad:</label>
+                <label>Nivel:</label>
                 <select id="dificultad">
-                    <option value="1">Nivel 1 (2 palabras)</option>
-                    <option value="2">Nivel 2 (3 palabras)</option>
+                    <option value="1">Artículo + Sustantivo</option>
+                    <option value="2">+ Adjetivo</option>
+                    <option value="3">+ Verbo</option>
                 </select>
             </div>
             <div class="parametro">
-                <label>Separación (px):</label>
-                <input type="number" id="separacion" value="20" min="10" max="100">
-            </div>
-            <div class="parametro">
                 <label>Intentos:</label>
-                <input type="number" id="intentos" value="10" min="1" max="50">
+                <input type="number" id="intentos" value="20" min="5" max="100">
             </div>
             <div class="parametro">
                 <label>Tiempo (ms):</label>
@@ -35,23 +32,27 @@
         </div>
 
         <div id="juego" class="hidden">
+            <div class="contadores">
+                <div class="contador-vidas">❤️ × <span id="vidas-restantes">0</span></div>
+                <div id="nivel-actual">Nivel 1</div>
+            </div>
             <p id="combinacion"></p>
+            <div id="botones">
+                <button id="incorrecto">❌ Incorrecto</button>
+                <button id="correcto">✅ Correcto</button>
+            </div>
         </div>
 
         <div id="resultados" class="hidden">
             <h2>RESULTADOS</h2>
-            <p>Intentos: <span id="total-intentos"></span></p>
-            <p>Aciertos: <span id="aciertos"></span></p>
-            <p>Errores: <span id="errores"></span></p>
-            <p>Racha máxima: <span id="racha-maxima"></span></p>
-            <p>Tiempo medio: <span id="tiempo-medio"></span> ms</p>
-            <button id="reintentar">Reintentar</button>
+            <p>Nivel alcanzado: <span id="nivel-final">1</span></p>
+            <p>Intentos: <span id="total-intentos">0</span></p>
+            <p>Aciertos: <span id="aciertos">0</span></p>
+            <p>Errores: <span id="errores">0</span></p>
+            <p>Vidas restantes: <span id="vidas-final">0</span></p>
+            <p>Racha máxima: <span id="racha-maxima">0</span></p>
+            <button id="reintentar">Volver a Jugar</button>
         </div>
-    </div>
-
-    <div id="botones" class="hidden">
-        <button id="incorrecto">Incorrecto</button>
-        <button id="correcto">Correcto</button>
     </div>
 
     <script src="script.js"></script>
