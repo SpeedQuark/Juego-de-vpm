@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="titulo-juego">Gramática Veloz</h1>
+        <h1>Gramática Veloz</h1>
 
         <div id="configuracion">
             <h2>Configuración</h2>
@@ -24,32 +24,24 @@
                 <label>Intentos:</label>
                 <input type="number" id="intentos" value="20" min="5" max="100">
             </div>
-            <div class="parametro">
-                <label>Tiempo (ms):</label>
-                <input type="number" id="tiempo" value="2000" min="500" max="5000">
-            </div>
-            <button id="comenzar" class="btn-comenzar">Comenzar</button>
+            <button id="comenzar">Comenzar</button>
         </div>
 
         <div id="juego" class="hidden">
             <div class="contadores">
-                <div class="contador-vidas">❤️ × <span id="vidas-restantes">0</span></div>
+                <div class="vidas">Vidas: <span id="vidas-restantes">0</span></div>
                 <div id="nivel-actual">Nivel 1</div>
             </div>
             <p id="combinacion"></p>
             <div id="botones">
-                <button id="incorrecto">❌ Incorrecto</button>
-                <button id="correcto">✅ Correcto</button>
+                <button id="incorrecto">Incorrecto</button>
+                <button id="correcto">Correcto</button>
             </div>
         </div>
 
         <div id="resultados" class="hidden">
-            <h2>RESULTADOS</h2>
-            <p>Nivel alcanzado: <span id="nivel-final">1</span></p>
-            <p>Intentos: <span id="total-intentos">0</span></p>
-            <p>Aciertos: <span id="aciertos">0</span></p>
-            <p>Errores: <span id="errores">0</span></p>
-            <p>Vidas restantes: <span id="vidas-final">0</span></p>
+            <h2>Resultados</h2>
+            <p>Aciertos: <span id="aciertos">0</span>/<span id="total-intentos">0</span></p>
             <p>Racha máxima: <span id="racha-maxima">0</span></p>
             <button id="reintentar">Volver a Jugar</button>
         </div>
