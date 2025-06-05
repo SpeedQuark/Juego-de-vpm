@@ -1,151 +1,111 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // Elementos del DOM
-    const elementos = {
-        config: document.getElementById("configuracion"),
-        juego: document.getElementById("juego"),
-        resultados: document.getElementById("resultados"),
-        combo: document.getElementById("combinacion"),
-        btnComenzar: document.getElementById("comenzar"),
-        btnIncorrecto: document.getElementById("incorrecto"),
-        btnCorrecto: document.getElementById("correcto"),
-        btnReintentar: document.getElementById("reintentar"),
-        vidasDisplay: document.getElementById("vidas-restantes"),
-        nivelDisplay: document.getElementById("nivel-actual"),
-        totalIntentos: document.getElementById("total-intentos"),
-        aciertosDisplay: document.getElementById("aciertos"),
-        rachaMaxima: document.getElementById("racha-maxima")
-    };
-
-    // Vocabulario completo
-    const vocabulario = {
+    // Configuración inicial
+    const config = {
         articulos: ["el", "la", "los", "las", "un", "una", "unos", "unas"],
-        sustantivos: ["perro", "gato", "casa", "árbol", "libro", "mesa", "flor", "ciudad"],
-        adjetivos: ["grande", "pequeño", "rojo", "azul", "alto", "bajo"],
-        verbos: ["corre", "salta", "lee", "juega", "canta"]
+        sustantivos: ["perro", "gato", "casa", "libro", "mesa", "flor"],
+        adjetivos: ["grande", "pequeño", "rojo", "azul"],
+        verbos: ["corre", "salta", "lee"]
     };
 
     // Estado del juego
     const estado = {
         dificultad: 1,
-        intentosTotales: 0,
-        intentosRestantes: 0,
-        aciertos: 0,
-        rachaActual: 0,
-        rachaMaxima: 0,
+        intentos: 0,
         vidas: 0,
+        aciertos: 0,
+        racha: 0,
+        rachaMaxima: 0,
         esCorrecta: false
     };
 
-    // Funciones básicas
-    function randomItem(array) {
-        return array[Math.floor(Math.random() * array.length)];
-    }
+    // Elementos del DOM
+    const UI = {
+        config: document.getElementById("configuracion"),
+        juego: document.getElementById("juego"),
+        resultados: document.getElementById("resultados"),
+        combo: document.getElementById("combinacion"),
+        vidas: document.getElementById("vidas-restantes"),
+        nivel: document.getElementById("nivel-actual"),
+        aciertos: document.getElementById("aciertos"),
+        totalIntentos: document.getElementById("total-intentos"),
+        rachaMaxima: document.getElementById("racha-maxima")
+    };
 
-    function mostrarPantalla(pantalla) {
-        elementos.config.classList.add("hidden");
-        elementos.juego.classList.add("hidden");
-        elementos.resultados.classList.add("hidden");
-        document.getElementById(pantalla).classList.remove("hidden");
+    // Funciones clave
+    function randomItem(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
     }
 
     function generarFrase() {
-        const articulo = randomItem(vocabulario.articulos);
-        const sustantivo = randomItem(vocabulario.sustantivos);
-        
-        // 50% de probabilidad de error gramatical
+        const articulo = randomItem(config.articulos);
+        const sustantivo = randomItem(config.sustantivos);
         estado.esCorrecta = Math.random() > 0.5;
 
         switch(estado.dificultad) {
-            case 1: // Artículo + Sustantivo
-                if (estado.esCorrecta) {
-                    return `${articulo} ${sustantivo}`;
-                } else {
-                    // Forzar error de concordancia
-                    const articuloIncorrecto = randomItem(
-                        vocabulario.articulos.filter(a => a !== articulo)
-                    );
-                    return `${articuloIncorrecto} ${sustantivo}`;
-                }
-                
-            case 2: // + Adjetivo
-                const adjetivo = randomItem(vocabulario.adjetivos);
-                if (estado.esCorrecta) {
-                    return `${articulo} ${sustantivo} ${adjetivo}`;
-                } else {
-                    // Adjetivo con error de concordancia
-                    return `${articulo} ${sustantivo} ${adjetivo}x`;
-                }
-                
-            case 3: // + Verbo
-                const verbo = randomItem(vocabulario.verbos);
-                if (estado.esCorrecta) {
-                    return `${articulo} ${sustantivo} ${randomItem(vocabulario.adjetivos)} ${verbo}`;
-                } else {
-                    // Verbo en infinitivo (error)
-                    return `${articulo} ${sustantivo} ${randomItem(vocabulario.adjetivos)} ${verbo}r`;
-                }
+            case 1:
+                return estado.esCorrecta 
+                    ? `${articulo} ${sustantivo}`
+                    : `${randomItem(config.articulos.filter(a => a !== articulo))} ${sustantivo}`;
+            case 2:
+                return estado.esCorrecta
+                    ? `${articulo} ${sustantivo} ${randomItem(config.adjetivos)}`
+                    : `${articulo} ${sustantivo} ${randomItem(config.adjetivos)}x`;
+            case 3:
+                return estado.esCorrecta
+                    ? `${articulo} ${sustantivo} ${randomItem(config.adjetivos)} ${randomItem(config.verbos)}`
+                    : `${articulo} ${sustantivo} ${randomItem(config.adjetivos)} ${randomItem(config.verbos)}r`;
         }
     }
 
-    function iniciarJuego() {
+    function comenzarJuego() {
         estado.dificultad = parseInt(document.getElementById("dificultad").value);
-        estado.intentosTotales = parseInt(document.getElementById("intentos").value);
-        estado.intentosRestantes = estado.intentosTotales;
+        estado.intentos = parseInt(document.getElementById("intentos").value);
+        estado.vidas = Math.max(1, Math.floor(estado.intentos * 0.1));
         
-        // Calcular vidas (10% de intentos)
-        estado.vidas = Math.max(1, Math.floor(estado.intentosTotales * 0.1));
+        UI.vidas.textContent = estado.vidas;
+        UI.nivel.textContent = estado.dificultad;
+        UI.config.classList.add("hidden");
+        UI.juego.classList.remove("hidden");
         
-        // Reiniciar contadores
-        estado.aciertos = 0;
-        estado.rachaActual = 0;
-        estado.rachaMaxima = 0;
-        
-        // Actualizar UI
-        elementos.vidasDisplay.textContent = estado.vidas;
-        elementos.nivelDisplay.textContent = `Nivel ${estado.dificultad}`;
-        
-        mostrarPantalla("juego");
-        mostrarSiguienteFrase();
+        siguienteFrase();
     }
 
-    function mostrarSiguienteFrase() {
-        if (estado.intentosRestantes <= 0 || estado.vidas <= 0) {
-            mostrarResultados();
+    function siguienteFrase() {
+        if (estado.intentos <= 0 || estado.vidas <= 0) {
+            finJuego();
             return;
         }
-        
-        elementos.combo.textContent = generarFrase();
-        estado.intentosRestantes--;
+        UI.combo.textContent = generarFrase();
+        estado.intentos--;
     }
 
-    function procesarRespuesta(respuestaUsuario) {
-        if (respuestaUsuario === estado.esCorrecta) {
+    function finJuego() {
+        UI.totalIntentos.textContent = estado.aciertos + (estado.vidasIniciales - estado.vidas);
+        UI.aciertos.textContent = estado.aciertos;
+        UI.rachaMaxima.textContent = estado.rachaMaxima;
+        UI.juego.classList.add("hidden");
+        UI.resultados.classList.remove("hidden");
+    }
+
+    function evaluar(respuesta) {
+        if (respuesta === estado.esCorrecta) {
             estado.aciertos++;
-            estado.rachaActual++;
-            if (estado.rachaActual > estado.rachaMaxima) {
-                estado.rachaMaxima = estado.rachaActual;
-            }
+            estado.racha++;
+            estado.rachaMaxima = Math.max(estado.racha, estado.rachaMaxima);
         } else {
             estado.vidas--;
-            elementos.vidasDisplay.textContent = estado.vidas;
-            estado.rachaActual = 0;
+            UI.vidas.textContent = estado.vidas;
+            estado.racha = 0;
         }
-        mostrarSiguienteFrase();
+        siguienteFrase();
     }
 
-    function mostrarResultados() {
-        elementos.totalIntentos.textContent = estado.intentosTotales;
-        elementos.aciertosDisplay.textContent = estado.aciertos;
-        elementos.rachaMaxima.textContent = estado.rachaMaxima;
-        mostrarPantalla("resultados");
-    }
-
-    // Event listeners
-    elementos.btnComenzar.addEventListener("click", iniciarJuego);
-    elementos.btnCorrecto.addEventListener("click", () => procesarRespuesta(true));
-    elementos.btnIncorrecto.addEventListener("click", () => procesarRespuesta(false));
-    elementos.btnReintentar.addEventListener("click", () => mostrarPantalla("config"));
-
-    // Iniciar en pantalla de configuración
-    mostrarPantalla("config");
+    // Eventos
+    document.getElementById("comenzar").addEventListener("click", comenzarJuego);
+    document.getElementById("correcto").addEventListener("click", () => evaluar(true));
+    document.getElementById("incorrecto").addEventListener("click", () => evaluar(false));
+    document.getElementById("reintentar").addEventListener("click", () => {
+        UI.resultados.classList.add("hidden");
+        UI.config.classList.remove("hidden");
+    });
 });
