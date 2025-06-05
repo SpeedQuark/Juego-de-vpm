@@ -10,6 +10,7 @@
     <div class="container">
         <h1>Juego de VPM</h1>
 
+        <!-- Pantalla Configuración -->
         <div id="configuracion">
             <h2>Configuración</h2>
             <div class="parametro">
@@ -27,23 +28,25 @@
             <button id="comenzar">Comenzar</button>
         </div>
 
+        <!-- Pantalla Juego -->
         <div id="juego" class="hidden">
             <div class="contadores">
-                <div class="vidas">Vidas: <span id="vidas-restantes">0</span></div>
-                <div id="nivel-actual">Nivel 1</div>
+                <div>Vidas: <span id="vidas-restantes">0</span></div>
+                <div>Nivel: <span id="nivel-actual">1</span></div>
             </div>
-            <p id="combinacion"></p>
+            <div id="combinacion"></div>
             <div id="botones">
                 <button id="incorrecto">Incorrecto</button>
                 <button id="correcto">Correcto</button>
             </div>
         </div>
 
+        <!-- Pantalla Resultados -->
         <div id="resultados" class="hidden">
             <h2>Resultados</h2>
             <p>Aciertos: <span id="aciertos">0</span>/<span id="total-intentos">0</span></p>
             <p>Racha máxima: <span id="racha-maxima">0</span></p>
-            <button id="reintentar">Volver a Jugar</button>
+            <button id="reintentar">Jugar de nuevo</button>
         </div>
     </div>
 
