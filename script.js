@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
         rachaMaxima: document.getElementById("racha-maxima")
     };
 
-    // Vocabulario
+    // Vocabulario completo
     const vocabulario = {
         articulos: ["el", "la", "los", "las", "un", "una", "unos", "unas"],
         sustantivos: ["perro", "gato", "casa", "árbol", "libro", "mesa", "flor", "ciudad"],
@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const estado = {
         dificultad: 1,
         intentosTotales: 0,
+        intentosRestantes: 0,
         aciertos: 0,
         rachaActual: 0,
         rachaMaxima: 0,
@@ -35,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function() {
         esCorrecta: false
     };
 
-    // Funciones
+    // Funciones básicas
     function randomItem(array) {
         return array[Math.floor(Math.random() * array.length)];
     }
@@ -51,38 +52,74 @@ document.addEventListener("DOMContentLoaded", function() {
         const articulo = randomItem(vocabulario.articulos);
         const sustantivo = randomItem(vocabulario.sustantivos);
         
-        // 50% de probabilidad de error
+        // 50% de probabilidad de error gramatical
         estado.esCorrecta = Math.random() > 0.5;
 
         switch(estado.dificultad) {
-            case 1:
-                return estado.esCorrecta 
-                    ? `${articulo} ${sustantivo}`
-                    : `${randomItem(vocabulario.articulos.filter(a => a !== articulo))} ${sustantivo}`;
-            case 2:
+            case 1: // Artículo + Sustantivo
+                if (estado.esCorrecta) {
+                    return `${articulo} ${sustantivo}`;
+                } else {
+                    // Forzar error de concordancia
+                    const articuloIncorrecto = randomItem(
+                        vocabulario.articulos.filter(a => a !== articulo)
+                    );
+                    return `${articuloIncorrecto} ${sustantivo}`;
+                }
+                
+            case 2: // + Adjetivo
                 const adjetivo = randomItem(vocabulario.adjetivos);
-                return estado.esCorrecta
-                    ? `${articulo} ${sustantivo} ${adjetivo}`
-                    : `${articulo} ${sustantivo} ${randomItem(vocabulario.adjetivos.filter(a => a !== adjetivo))}`;
-            case 3:
+                if (estado.esCorrecta) {
+                    return `${articulo} ${sustantivo} ${adjetivo}`;
+                } else {
+                    // Adjetivo con error de concordancia
+                    return `${articulo} ${sustantivo} ${adjetivo}x`;
+                }
+                
+            case 3: // + Verbo
                 const verbo = randomItem(vocabulario.verbos);
-                return estado.esCorrecta
-                    ? `${articulo} ${sustantivo} ${randomItem(vocabulario.adjetivos)} ${verbo}`
-                    : `${articulo} ${sustantivo} ${randomItem(vocabulario.adjetivos)} ${randomItem(vocabulario.verbos.filter(v => v !== verbo))}`;
+                if (estado.esCorrecta) {
+                    return `${articulo} ${sustantivo} ${randomItem(vocabulario.adjetivos)} ${verbo}`;
+                } else {
+                    // Verbo en infinitivo (error)
+                    return `${articulo} ${sustantivo} ${randomItem(vocabulario.adjetivos)} ${verbo}r`;
+                }
         }
     }
 
-    function siguienteFrase() {
-        if (estado.intentosTotales <= 0) {
+    function iniciarJuego() {
+        estado.dificultad = parseInt(document.getElementById("dificultad").value);
+        estado.intentosTotales = parseInt(document.getElementById("intentos").value);
+        estado.intentosRestantes = estado.intentosTotales;
+        
+        // Calcular vidas (10% de intentos)
+        estado.vidas = Math.max(1, Math.floor(estado.intentosTotales * 0.1));
+        
+        // Reiniciar contadores
+        estado.aciertos = 0;
+        estado.rachaActual = 0;
+        estado.rachaMaxima = 0;
+        
+        // Actualizar UI
+        elementos.vidasDisplay.textContent = estado.vidas;
+        elementos.nivelDisplay.textContent = `Nivel ${estado.dificultad}`;
+        
+        mostrarPantalla("juego");
+        mostrarSiguienteFrase();
+    }
+
+    function mostrarSiguienteFrase() {
+        if (estado.intentosRestantes <= 0 || estado.vidas <= 0) {
             mostrarResultados();
             return;
         }
+        
         elementos.combo.textContent = generarFrase();
-        estado.intentosTotales--;
+        estado.intentosRestantes--;
     }
 
-    function procesarRespuesta(respuesta) {
-        if (respuesta === estado.esCorrecta) {
+    function procesarRespuesta(respuestaUsuario) {
+        if (respuestaUsuario === estado.esCorrecta) {
             estado.aciertos++;
             estado.rachaActual++;
             if (estado.rachaActual > estado.rachaMaxima) {
@@ -92,43 +129,23 @@ document.addEventListener("DOMContentLoaded", function() {
             estado.vidas--;
             elementos.vidasDisplay.textContent = estado.vidas;
             estado.rachaActual = 0;
-            if (estado.vidas <= 0) {
-                mostrarResultados();
-                return;
-            }
         }
-        siguienteFrase();
+        mostrarSiguienteFrase();
     }
 
     function mostrarResultados() {
-        elementos.totalIntentos.textContent = estado.aciertos + (estado.vidasIniciales - estado.vidas);
+        elementos.totalIntentos.textContent = estado.intentosTotales;
         elementos.aciertosDisplay.textContent = estado.aciertos;
         elementos.rachaMaxima.textContent = estado.rachaMaxima;
         mostrarPantalla("resultados");
     }
 
-    // Eventos
-    elementos.btnComenzar.addEventListener("click", function() {
-        estado.dificultad = parseInt(document.getElementById("dificultad").value);
-        estado.intentosTotales = parseInt(document.getElementById("intentos").value);
-        estado.vidas = Math.max(1, Math.floor(estado.intentosTotales * 0.1));
-        estado.vidasIniciales = estado.vidas;
-        
-        elementos.vidasDisplay.textContent = estado.vidas;
-        elementos.nivelDisplay.textContent = `Nivel ${estado.dificultad}`;
-        
-        estado.aciertos = 0;
-        estado.rachaActual = 0;
-        estado.rachaMaxima = 0;
-        
-        mostrarPantalla("juego");
-        siguienteFrase();
-    });
-
+    // Event listeners
+    elementos.btnComenzar.addEventListener("click", iniciarJuego);
     elementos.btnCorrecto.addEventListener("click", () => procesarRespuesta(true));
     elementos.btnIncorrecto.addEventListener("click", () => procesarRespuesta(false));
     elementos.btnReintentar.addEventListener("click", () => mostrarPantalla("config"));
 
-    // Inicio
+    // Iniciar en pantalla de configuración
     mostrarPantalla("config");
 });
